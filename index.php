@@ -309,8 +309,6 @@ switch($request_method)
                                 $servicioAux = (object) $servicio;
                                 if($servicioAux->id == $id){
                                     if(Turno::validarDisponibilidad($listaTurnos,$fecha)){
-                                        echo $vehiculoAux->_patente;
-                                        echo $vehiculoAux->marca;
 
                                         $turno = new Turno($fecha,$vehiculoAux->_patente,$vehiculoAux->marca,$vehiculoAux->modelo,$vehiculoAux->precio,$servicioAux->tipo);
                                         Archivos::guardarJson($turno,'turno.json');
