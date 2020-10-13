@@ -3,6 +3,8 @@
 
 include_once './usuario.php';
 include_once './auto.php';
+include_once './servicio.php';
+include_once './turno.php';
 
 
 session_start();
@@ -23,7 +25,6 @@ $pathAux = explode('/', getenv('REQUEST_URI'));
 // echo "<br>";
 // var_dump($pathAux);
 // echo "<br>";
-
 
 switch($request_method)
 {
@@ -76,31 +77,55 @@ switch($request_method)
                     $datos = 'Nombre o Clave Incorrectas';                       
                 }
                 break;
-            case 'ingreso'://PUNTO 3
+            case 'vehiculo'://PUNTO 3
                 $header = getallheaders();
                 $token = $header['token'];
+                $marca = $_POST['marca'] ?? "";
+                $modelo = $_POST['modelo'] ?? "";
                 $patente = $_POST['patente'] ?? "";
+                $precio = $_POST['precio'] ?? 0;
                 
                 $usuarioLogueado = Token::VerificarToken($token);
                 
-                $fecha = date('d-h');
+                // $fecha = date('d-h');
                 
                 $usuarioLogueadoArray = (array) $usuarioLogueado;
-                
+                $listaVehiculos = Archivos::leerJson('./vehiculos.json',$listaVehiculos);
                 
                 if (!$usuarioLogueado) {
                     $datos = "Usuario no logueado, token incorrecto!";
                 }
                 else{
-                    
-                    $auto = new Auto($patente,$fecha,$usuarioLogueadoArray['email']);
-                    
-                    if(Archivos::guardarJson($auto,'autos.json')){
-                        $datos = "Auto guardado correctamente";
+                    /**si la lista no esta vacia valido si hay patente existente */
+                    if ($listaVehiculos != null) {
+                        $listaVehiculosArray = (array) $listaVehiculos;
+                        if(!(Auto::validarPatenteVehiculo($listaVehiculosArray,$patente))){
+                            $auto = new Auto($marca,$modelo,$patente,$precio);
+
+                            if(Archivos::guardarJson($auto,'vehiculos.json')){
+                                $datos = "Vehiculo guardado correctamente";
+                            }
+                            else{
+                                $datos = "Ocurrio un error al guardar el vehiculo";
+                            }
+                        }
+                        else{
+                            $datos = "Patente existente";
+                        }
                     }
+                    /**si la lista esta vacia doy de alta el vehiculo */
                     else{
-                        $datos = "Ocurrio un error al guardar el auto";
+                        $auto = new Auto($marca,$modelo,$patente,$precio);
+
+                        if(Archivos::guardarJson($auto,'vehiculos.json')){
+                            $datos = "Vehiculo guardado correctamente";
+                        }
+                        else{
+                            $datos = "Ocurrio un error al guardar el vehiculo";
+                        }
                     }
+                    
+                    
                 }
 
                 break;
@@ -155,73 +180,189 @@ switch($request_method)
         //$datos = Usuario::Mostrar($token);
         $token = $header['token'];
         $usuarioLogueado = Token::VerificarToken($token);
-        $patenteGet =$_GET['patente'] ?? "";
-        $path_info = explode("/",$path_info);
+        $patente = $_GET['patente'] ?? "";
+        $marca = $_GET['marca'] ?? "";
+        $modelo = $_GET['modelo'] ?? "";
         
+
+
+        $path_info = explode("/",$path_info);
+
         if (!$usuarioLogueado) {
             $datos = "token incorrecto";
         }
         else{
             switch ($path_info[1]){
                 
-            case 'retiro': //punto 4
-                $fechaEgreso = date('h');
+            case 'patente': //punto 4
+                $datos = "";
+                $listaAutos = Archivos::leerJson('./vehiculos.json',$listaAutos);
                 
-                $listaAutos = Archivos::leerJson('./autos.json',$listaAutos);
-                $patente = $pathAux[4];
                 
-                foreach ($listaAutos as $auto) {
-                    if ($auto['_patente'] == $patente) {
-                        //var_dump($auto);
-                        $importe = Auto::obtenerImporte($auto,$fechaEgreso);
+                /**si la patente no tiene la marca o modelo ingresado no devuelve nada */
+
+                foreach ($listaAutos as $vehiculo) {
+                    $vehiculoAux = (object) $vehiculo;
+                    if($path_info[2] == $vehiculoAux->_patente){
+                        if (strcasecmp ( $vehiculoAux->_patente, $patente)  == 0) {
                         
-                        $datos = "importe: {$importe} , patente: {$patente} , ingreso: {$auto['_horaIngreso']} , egreso: {$fechaEgreso} hs";
-                    break;
+                            $datos .= "Patente encontrada: " . $vehiculoAux->_patente . " <br> ";
+                            
+                        }
+                        else if($patente != ""){
+                            $datos .= " no existe $patente <br>";
+                        }
+                        
+                        if (strcasecmp ( $vehiculoAux->modelo, $modelo)  == 0 && $modelo != "") {
+                            $datos .= "Modelo encontrado: " . $vehiculoAux->modelo . "<br>";
+                        }
+                        else if($modelo != ""){
+                            $datos .= " no existe $modelo <br>";
+                        }
+                        
+                        if (strcasecmp ( $vehiculoAux->marca, $marca)  == 0 && $marca != "") {
+                            
+                            $datos .= " marca encontrada: " . $vehiculoAux->marca . "";
+    
+                        }
+                        else if($marca != ""){
+                            $datos .= " no existe $marca <br>";
+                        }
                     }
                     else{
-                        $datos = "patente no encontrada";
+                        $datos = "Patente inexistente";
                     }
+                    
                 }
-
-
                 
-                //$datos = Materias::mostrarMaterias();
-                if ($datos === "") {
+                if ($datos == "") {
                     $datos = 'Faltan datos';
                 }
                 
                 break;
-            case 'ingreso'://PUNTO 5
+            case 'servicio'://PUNTO 5
                 $datos = " ";
-                if ($patenteGet == null) {
-                    $listaAutos = Archivos::leerJson('./autos.json',$listaAutos);
-                    // $listaAutosAux = (object) $listaAutos;
-                    $listaAutosOrdenados = Auto::ordenarAutoAscendente($listaAutos);
-                    
-                    foreach ($listaAutosOrdenados as $auto) {
-                        $autoAux = (object) $auto;
-                        $mostrarAux = Auto::mostrarAuto($autoAux);
+
+                $id = $_GET['id'] ?? 0;
+                $tipo = $_GET['tipo'] ?? 0;
+                $precio = $_GET['precio'] ?? 0;
+                $demora = $_GET['demora'] ?? "";
+                
+                $listaPatente = Archivos::leerJson('./tipoServicio.json',$listaServicios);
+                
+
+                if ($listaPatente != null) {
+                    $listaServiciosAux = (array) $listaServicios;
+                    if(!(Servicio::validarServicioId($listaServiciosAux,$id))){
+                        if ($tipo == 50000 || $tipo == 20000 || $tipo == 10000) {
+                            $servicio = new Servicio($id,$tipo,$precio,$demora);
+                        }
+                        else{
+                            $tipo = 0;
+                            $servicio = new Servicio($id,$tipo,$precio,$demora);
+                        }
                         
-                        $datos .= "<br>". $mostrarAux;
+
+                        if(Archivos::guardarJson($servicio,'tipoServicio.json')){
+                            $datos = "Se dio de alta el servicio correctamente";
+                        }
+                        else{
+                            $datos = "Ocurrio un error al guardar el servicio";
+                        }
+                    }
+                    else{
+                        $datos = "ID de servicio existente";
                     }
                 }
                 else{
-                    $listaAutos = Archivos::leerJson('./autos.json',$listaAutos);
-                    foreach ($listaAutos as $auto) {
-                        if ($patenteGet == $auto['_patente']) {
-                            $datos = " ". $patenteGet . " fecha ingreso: " . $auto['_horaIngreso'] . " email: " . $auto['email'] . " importe: " . $auto['importe'];
-                        }
-                        
+                    if ($tipo == 50000 || $tipo == 20000 || $tipo == 10000) {
+                        $servicio = new Servicio($id,$tipo,$precio,$demora);
+                    }
+                    else{
+                        $tipo = 0;
+                        $servicio = new Servicio($id,$tipo,$precio,$demora);
+                    }
+                    
+
+                    if(Archivos::guardarJson($servicio,'tipoServicio.json')){
+                        $datos = "Se dio de alta el servicio correctamente";
+                    }
+                    else{
+                        $datos = "Ocurrio un error al guardar el servicio";
                     }
                 }
-                
-                
                 if($datos === "")
                 {
                     $datos = 'Faltan datos';
                 }
-                //echo json_encode($respuesta);
                 break;
+            case 'turno':
+                $fecha = $_GET['fecha'] ?? "";
+                $id = $_GET['id'] ?? 0;
+
+                $listaVehiculos = Archivos::leerJson('./vehiculos.json',$listaVehiculos);
+                $listaServicios = Archivos::leerJson('./tipoServicio.json',$listaServicios);
+                $listaTurnos = Archivos::leerJson('./turnos.json',$listaTurnos);
+
+                if ($listaTurnos != null) {
+                    
+                    foreach ($listaVehiculos as $vehiculo) {
+                        $vehiculoAux = (object) $vehiculo;
+                        if ($vehiculoAux->_patente == $patente) {
+                            foreach ($listaServicios as $servicio) {
+                                $servicioAux = (object) $servicio;
+                                if($servicioAux->id == $id){
+                                    if(Turno::validarDisponibilidad($listaTurnos,$fecha)){
+                                        echo $vehiculoAux->_patente;
+                                        echo $vehiculoAux->marca;
+
+                                        $turno = new Turno($fecha,$vehiculoAux->_patente,$vehiculoAux->marca,$vehiculoAux->modelo,$vehiculoAux->precio,$servicioAux->tipo);
+                                        Archivos::guardarJson($turno,'turno.json');
+                                        $datos = "Turno dado de alta correctamaente";
+                                    }
+                                    else{
+                                        $datos = "Fecha sin disponibilidad";
+                                    }
+                                break;
+                                }
+                            }
+                        }
+                        else{
+                            $datos = "Patente no encontrada";
+                        }
+                    }
+                }
+                else{
+                    foreach ($listaVehiculos as $vehiculo) {
+                        $vehiculoAux = (object) $vehiculo;
+                        if ($vehiculoAux->_patente == $patente) {
+                            foreach ($listaServicios as $servicio) {
+                                $servicioAux = (object) $servicio;
+                                if($servicioAux->id == $id){
+                                    echo $vehiculoAux->_patente;
+                                    echo $vehiculoAux->marca;
+                                    
+                                    $turno = new Turno($fecha,$vehiculoAux->_patente,$vehiculoAux->marca,$vehiculoAux->modelo,$vehiculoAux->precio,$servicioAux->tipo);
+                                    Archivos::guardarJson($turno,'turno.json');
+                                    $datos = "Turno dado de alta correctamaente";
+                                    
+                                break;
+                                }
+                            }
+                        }
+                        else{
+
+                            $datos = "Patente no encontrada";
+                        }
+                    }
+                    
+                }
+                
+            break;
+
+                
+                
+                
             default:
             $datos = 'faltan datos';
             break;

@@ -1,17 +1,19 @@
 <?php
 class Auto
 { 
-    public $_horaIngreso;
+    // public $_horaIngreso;
     public $_patente;
-    public $email;
-    public $importe;
+    // public $email;
+    public $precio;
+    public $marca;
+    public $modelo;
 
-    public function __construct($_patente,$_horaIngreso = null, $email,$importe = 0)
+    public function __construct($marca,$modelo,$patente,$precio = 0)
     {
-        $this->_horaIngreso = $_horaIngreso;
-        $this->_patente = $_patente;
-        $this->email = $email;
-        $this->$importe = $importe;
+        $this->marca = $marca;
+        $this->modelo = $modelo;
+        $this->_patente = $patente;
+        $this->precio = $precio;
     }
 
     // public function AgregarImpuestos($_impuesto){
@@ -29,20 +31,20 @@ class Auto
         $tiempo = 0;
         $tiempo = $horaRetiro - $horaIngresoAux;
         if ($tiempo > 4) {
-            $auto['importe'] = $precioCuatro * $tiempo;
+            $auto['precio'] = $precioCuatro * $tiempo;
         }
         else if($tiempo > 4 && $tiempo < 12){
-            $auto['importe'] = $precioCuatroYDoce * $tiempo;
+            $auto['precio'] = $precioCuatroYDoce * $tiempo;
         }
         else{
-            $auto['importe'] = $precioMayorDoce * $tiempo;
+            $auto['precio'] = $precioMayorDoce * $tiempo;
         }
-        return $auto['importe'];
+        return $auto['precio'];
     
     }
 
     public static function mostrarAuto($objAuto){
-        return "Patente: ". $objAuto->_patente . ' Email: ' . $objAuto->email . ' Fecha Ingreso: ' . $objAuto->_horaIngreso;
+        return "Patente: ". $objAuto->_patente . ' Marca: ' . $objAuto->marca . ' Modelo: ' . $objAuto->modelo . ' Precio: ' . $objAuto->precio;
     }
     
     
@@ -82,6 +84,20 @@ class Auto
 
         return $this->_patente . '*' . $this->email . '*' . $this->_horaIngreso;
 
+    }
+    public static function validarPatenteVehiculo($listaVehiculos,$patente){
+
+        $retorno = false;
+        foreach ($listaVehiculos as $vehiculo) {
+            $objAux = (object) $vehiculo;
+            if ($objAux->_patente == $patente) {
+                $retorno = true;
+            }
+            else{
+                $retorno = false;
+            }
+        }
+        return $retorno;
     }
 
     //no hacemos geters ni setters por que php ya los trae

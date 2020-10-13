@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "1ef3beaa-dc9a-45fe-a1e0-ca7c95f6dc7e",
+		"name": "RPP-Programacion3-GonzalezSantiago",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Punto 1",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "admin@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "tipo",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "text"
+						},
+						{
+							"key": "imagen",
+							"type": "file",
+							"src": "/C:/xampp/htdocs/RPP_Programacion_III/jordan-logo.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/RPP_Programacion_III/index.php/registro",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"RPP_Programacion_III",
+						"index.php",
+						"registro"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Punto 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "admin@mail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/PP_Programacion_III/index.php/login",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"PP_Programacion_III",
+						"index.php",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Punto 3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"type": "text",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwiY2xhdmUiOiIkMnkkMTAkblVmVkdnYUFQV3dvSzhlVHphdlIwT0twZVMxaHN6eld2SEYyR3ZwVEYuWVl3bndUWnU1M0cifQ.OQvxI0xAiOkPAfBSRlVukoUzm9_7qtV30jSlcOWPJhc"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "marca",
+							"value": "ford",
+							"type": "text"
+						},
+						{
+							"key": "modelo",
+							"value": "mustang",
+							"type": "text"
+						},
+						{
+							"key": "patente",
+							"value": "aaa111",
+							"type": "text"
+						},
+						{
+							"key": "precio",
+							"value": "120000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/RPP_Programacion_III/index.php/vehiculo",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"RPP_Programacion_III",
+						"index.php",
+						"vehiculo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Punto 4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwiY2xhdmUiOiIkMnkkMTAkblVmVkdnYUFQV3dvSzhlVHphdlIwT0twZVMxaHN6eld2SEYyR3ZwVEYuWVl3bndUWnU1M0cifQ.OQvxI0xAiOkPAfBSRlVukoUzm9_7qtV30jSlcOWPJhc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost/RPP_Programacion_III/index.php/patente/aaa111?marca=ford&modelo=mustang&patente=aaa111",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"RPP_Programacion_III",
+						"index.php",
+						"patente",
+						"aaa111"
+					],
+					"query": [
+						{
+							"key": "marca",
+							"value": "ford"
+						},
+						{
+							"key": "modelo",
+							"value": "mustang"
+						},
+						{
+							"key": "patente",
+							"value": "aaa111"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Punto 5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwiY2xhdmUiOiIkMnkkMTAkblVmVkdnYUFQV3dvSzhlVHphdlIwT0twZVMxaHN6eld2SEYyR3ZwVEYuWVl3bndUWnU1M0cifQ.OQvxI0xAiOkPAfBSRlVukoUzm9_7qtV30jSlcOWPJhc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost/RPP_Programacion_III/index.php/servicio?id=1&tipo=full&precio=120&demora=5",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"RPP_Programacion_III",
+						"index.php",
+						"servicio"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						},
+						{
+							"key": "tipo",
+							"value": "full"
+						},
+						{
+							"key": "precio",
+							"value": "120"
+						},
+						{
+							"key": "demora",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Punto 6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwiY2xhdmUiOiIkMnkkMTAkblVmVkdnYUFQV3dvSzhlVHphdlIwT0twZVMxaHN6eld2SEYyR3ZwVEYuWVl3bndUWnU1M0cifQ.OQvxI0xAiOkPAfBSRlVukoUzm9_7qtV30jSlcOWPJhc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost/RPP_Programacion_III/index.php/turno?patente=asdasd&id=1&fecha",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"RPP_Programacion_III",
+						"index.php",
+						"turno"
+					],
+					"query": [
+						{
+							"key": "patente",
+							"value": "asdasd"
+						},
+						{
+							"key": "id",
+							"value": "1"
+						},
+						{
+							"key": "fecha",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Punto 7",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"type": "text",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFkbWluQG1haWwuY29tIiwiY2xhdmUiOiIkMnkkMTAkblVmVkdnYUFQV3dvSzhlVHphdlIwT0twZVMxaHN6eld2SEYyR3ZwVEYuWVl3bndUWnU1M0cifQ.OQvxI0xAiOkPAfBSRlVukoUzm9_7qtV30jSlcOWPJhc"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "imagen",
+							"type": "file",
+							"src": "/C:/Users/SantiGO/Pictures/jordan-logo.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost/RPP_Programacion_III/index.php/users",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"RPP_Programacion_III",
+						"index.php",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
