@@ -12,16 +12,17 @@ class Turno
 
     public function __construct($fecha,$patente,$marca,$modelo,$precio,$tipoServicio)
     {
-        $this->$fecha = $fecha;
-        $this->$patente = $patente;
-        $this->$marca = $marca;
-        $this->$modelo = $modelo;
-        $this->$precio = $precio;
-        $this->$tipoServicio = $tipoServicio;
+        $this->fecha = $fecha;
+        $this->patente = $patente;
+        $this->marca = $marca;
+        $this->modelo = $modelo;
+        $this->precio = $precio;
+        $this->tipoServicio = $tipoServicio;
     }
     
     public static function validarDisponibilidad($listaTurnos,$fechaAux){
         $retorno = false;
+        echo $fechaAux;
         foreach ($listaTurnos as $turno) {
             $turnoAux = (object) $turno;
             if($turnoAux->fecha == $fechaAux){

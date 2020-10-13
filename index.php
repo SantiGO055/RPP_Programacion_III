@@ -129,7 +129,7 @@ switch($request_method)
                 }
 
                 break;
-            case 'users':
+            case 'stats':
                 $foto = $_POST['foto'] ?? "";
                 $token = $header['token'];
                 $usuarioLogueado = Token::VerificarToken($token);
@@ -140,12 +140,7 @@ switch($request_method)
                     $datos = "Usuario no logueado, token incorrecto!";
                 }
                 else{
-                    if(Usuario::asignarFotoNueva($usuarioLogueadoArray['email'],$foto)){
-                        $datos = "Imagen modificada correctamente";
-                    }
-                    else{
-                        $datos = "Ocurrio un error al guardar la imagen";
-                    }
+                    
                     
                 }
             break;
@@ -339,10 +334,13 @@ switch($request_method)
                             foreach ($listaServicios as $servicio) {
                                 $servicioAux = (object) $servicio;
                                 if($servicioAux->id == $id){
-                                    echo $vehiculoAux->_patente;
-                                    echo $vehiculoAux->marca;
+                                    $turnoPatente = $vehiculoAux->_patente;
+                                    $turnoMarca = $vehiculoAux->marca;
+                                    $turnoModelo = $vehiculoAux->modelo;
+                                    $turnoPrecio = $vehiculoAux->precio;
+                                    $turnoTipo = $servicioAux->tipo;
                                     
-                                    $turno = new Turno($fecha,$vehiculoAux->_patente,$vehiculoAux->marca,$vehiculoAux->modelo,$vehiculoAux->precio,$servicioAux->tipo);
+                                    $turno = new Turno($fecha,$turnoPatente,$turnoMarca,$vehiculoAux->modelo,$turnoPrecio,$turnoTipo);
                                     Archivos::guardarJson($turno,'turno.json');
                                     $datos = "Turno dado de alta correctamaente";
                                     
