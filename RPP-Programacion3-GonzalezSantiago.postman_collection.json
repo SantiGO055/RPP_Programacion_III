@@ -293,19 +293,20 @@
 						{
 							"key": "imagen",
 							"type": "file",
-							"src": "/C:/Users/SantiGO/Pictures/jordan-logo.png"
+							"src": [],
+							"disabled": true
 						}
 					]
 				},
 				"url": {
-					"raw": "localhost/RPP_Programacion_III/index.php/users",
+					"raw": "localhost/RPP_Programacion_III/index.php/stats",
 					"host": [
 						"localhost"
 					],
 					"path": [
 						"RPP_Programacion_III",
 						"index.php",
-						"users"
+						"stats"
 					]
 				}
 			},

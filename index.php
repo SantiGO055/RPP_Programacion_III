@@ -140,7 +140,7 @@ switch($request_method)
                     $datos = "Usuario no logueado, token incorrecto!";
                 }
                 else{
-                    
+                    $datos = "";
                     
                 }
             break;
@@ -299,6 +299,7 @@ switch($request_method)
                 $listaServicios = Archivos::leerJson('./tipoServicio.json',$listaServicios);
                 $listaTurnos = Archivos::leerJson('./turnos.json',$listaTurnos);
 
+                /**si la lista no esta vacia, verifico disponibilidad por fecha */
                 if ($listaTurnos != null) {
                     
                     foreach ($listaVehiculos as $vehiculo) {
@@ -334,13 +335,9 @@ switch($request_method)
                             foreach ($listaServicios as $servicio) {
                                 $servicioAux = (object) $servicio;
                                 if($servicioAux->id == $id){
-                                    $turnoPatente = $vehiculoAux->_patente;
-                                    $turnoMarca = $vehiculoAux->marca;
-                                    $turnoModelo = $vehiculoAux->modelo;
-                                    $turnoPrecio = $vehiculoAux->precio;
-                                    $turnoTipo = $servicioAux->tipo;
                                     
-                                    $turno = new Turno($fecha,$turnoPatente,$turnoMarca,$vehiculoAux->modelo,$turnoPrecio,$turnoTipo);
+                                    
+                                    $turno = new Turno($fecha,$vehiculoAux->_patente,$vehiculoAux->marca,$vehiculoAux->modelo,$vehiculoAux->precio,$servicioAux->tipo);
                                     Archivos::guardarJson($turno,'turno.json');
                                     $datos = "Turno dado de alta correctamaente";
                                     
