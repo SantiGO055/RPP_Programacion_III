@@ -22,7 +22,6 @@ class Turno
     
     public static function validarDisponibilidad($listaTurnos,$fechaAux){
         $retorno = false;
-        echo $fechaAux;
         foreach ($listaTurnos as $turno) {
             $turnoAux = (object) $turno;
             if($turnoAux->fecha != $fechaAux){
