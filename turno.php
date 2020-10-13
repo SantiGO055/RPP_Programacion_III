@@ -25,7 +25,7 @@ class Turno
         echo $fechaAux;
         foreach ($listaTurnos as $turno) {
             $turnoAux = (object) $turno;
-            if($turnoAux->fecha == $fechaAux){
+            if($turnoAux->fecha != $fechaAux){
                 $retorno = false;
             }
             else{
